@@ -1,91 +1,170 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta
+<head>
+    <meta charset="utf-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Начало работы с Webpack</title>
+    <style>
+        html {
+            font-size: 20px;
+        }
+    </style>
+    <script src="./bundle.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Начало</h2>
+        <p>
+            Создаем директорию и инициализируем npm, чтобы создать
+            <code>package.json</code> и устанавливаем <code>webpack</code> как
+            локальную зависимость.
+        </p>
+        <pre>
+            <code>
+$ npm init -y
+$ npm i webpack --save-dev
+            </code>
+        </pre>
+        <p>Разделим исходный код и готовый упакованный код сайта:</p>
+        <pre>
+            <code>
+$ mkdir dist src
+$ touch dist/index.html src/app.js
+            </code>
+        </pre>
+
+        <h2>Установка Bootstrap</h2>
+        <p>Установим Bootstrap и все сопутствующие зависимости</p>
+        <pre>
+            <code>
+$ npm install bootstrap jquery popper.js --save
+$ npm install autoprefixer css-loader node-sass postcss-loader sass-loader style-loader --save-dev
+</code>
+</pre>
+
+        <h2>Настройка Webpack</h2>
+        <p>Создаем файл конфигурации webpack</p>
+        <pre>
+            <code>
+$ touch webpack.config.js
+            </code>
+        </pre>
+        <p>Заполним его следующим содержимым:</p>
+        <pre>
+    <code>
+const path = require("path")
+
+module.exports = {
+    entry: "./src/app.js",
+    output: {
+        filename: "bundle.js",
+        path: path.resolve(__dirname, "dist"),
+    },
+    module: {
+        rules: [
+        {
+                test: /\.(scss)$/,
+                use: [
+                    {
+                        loader: "style-loader",
+                    },
+                    {
+                        // Interprets `@import` and `url()` like `import/require()` and will resolve them
+                        loader: "css-loader",
+                    },
+                    {
+                        // Loader for webpack to process CSS with PostCSS
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                pluguns: ["autoprefixer"],
+                            },
+                        },
+                    },
+                    {
+                        // Loads a SASS/SCSS file and compiles it to CSS
+                        loader: "sass-loader",
+                    },
+                    ],
+                },
+        ],
+    },
+}
+</code>
+        </pre>
+        <p>
+            Создадим файл Syntactically Awesome Style Sheets (scss) и
+            импортируем bootstrap
+        </p>
+        <pre>
+            <code>
+$ mkdir src/scss/ 
+$ touch app.scss
+            </code>
+        </pre>
+        <p>
+            <code>src/scss/app.scss</code>
+        </p>
+        <pre>
+            <code>
+@import "~bootstrap/scss/bootstrap";
+            </code>
+        </pre>
+        <h2>Импорт Bootstrap</h2>
+        <p>
+            Импортируем файлы Bootstrap и scss в файле <code>/src/app.js</code>
+        </p>
+        <pre>
+            <code>
+import 'bootstrap';
+import './scss/app.scss';
+            </code>
+        </pre>
+
+        <h2>Упаковка с Webpack</h2>
+        <p>
+            Добавим следующую строчку в <code>package.json</code> в разделе
+            <code>scripts</code>
+        </p>
+        <pre>
+            <code>
+"build": "webpack",
+            </code>
+        </pre>
+        <p>И создадим начальную страницу сайта <code>/dist/index.html</code></p>
+        <pre>
+            <code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8" /&gt;
+        &lt;meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <title></title>
-        <script src="./bundle.js"></script>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div
-                    class="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                >
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a
-                                class="nav-link active"
-                                aria-current="page"
-                                href="#"
-                                >Home</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="#">Action</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"
-                                        >Another action</a
-                                    >
-                                </li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li>
-                                    <a class="dropdown-item" href="#"
-                                        >Something else here</a
-                                    >
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" role="search">
-                        <input
-                            class="form-control me-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button class="btn btn-outline-success" type="submit">
-                            Search
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </nav>
+        /&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;script src="./bundle.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1 class="display-1"&gt;Hello World&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+            </code> 
+        </pre>
 
-        <button type="button" class="btn btn-primary">Button</button>
-    </body>
-</html>
+        <p>Начнем сборку нашего сайта</p>
+        <pre>
+            <code>
+$ npm run build
+            </code>
+    </pre>
+
+        <p>
+            При сборке появляется множество некритических ошибок, но сайт
+            собирается.
+        </p>
+        <img src="./build_result.png" />
+    </div>
+</body>
