@@ -1,10 +1,14 @@
 {
   "name": "lab4",
+  "repository": {
+    "url": "git+https://github.com/mxschardt/kp4.git"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "deploy": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +19,7 @@
     "css-loader": "^6.7.3",
     "export-loader": "^1.0.52",
     "exports-loader": "^4.0.0",
+    "gh-pages": "^5.0.0",
     "node-sass": "^8.0.0",
     "postcss-loader": "^7.1.0",
     "sass-loader": "^13.2.1",
